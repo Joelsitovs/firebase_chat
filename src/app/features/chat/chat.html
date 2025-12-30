@@ -1,0 +1,185 @@
+<div
+  class="h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+  <div
+    class="w-full max-w-4xl h-full bg-slate-800/70 backdrop-blur rounded-2xl shadow-2xl border border-slate-700 overflow-hidden flex flex-col">
+    <!-- Header -->
+    <header class="px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div>
+          <h1 class="text-white font-semibold leading-tight">Sala de Chat</h1>
+          <p class="text-slate-400 text-sm">Online • Mensajes en tiempo real</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- User pill (placeholder) -->
+        @if (user$ | async; as user) {
+          <div
+            class="hidden sm:flex items-center gap-2 bg-slate-900/50 border border-slate-700 rounded-full px-3 py-1.5">
+            <div class="w-7 h-7 rounded-full overflow-hidden bg-slate-700 shrink-0">
+              <img
+                [src]="user.photoURL ?? 'https://ui-avatars.com/api/?name=User&background=334155&color=fff'"
+                [alt]="user.displayName ?? user.email ?? 'Usuario'"
+                class="w-full h-full object-cover"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+            <span class="text-slate-200 text-sm truncate max-w-55">
+      {{ user.email }}
+    </span>
+          </div>
+        }
+        <!-- Logout button (placeholder) -->
+        <button
+          (click)="logout()"
+          class="bg-slate-900/60 hover:bg-slate-900 border border-slate-700 text-slate-200
+                 px-4 py-2 rounded-xl transition active:scale-[0.98]"
+        >
+          Salir
+        </button>
+      </div>
+    </header>
+
+    <!-- Messages -->
+    <main
+      #messagesEl
+      (scroll)="onMessagesScroll(messagesEl)"
+      class="flex-1 overflow-y-auto px-6 py-5 space-y-4"
+    >
+      @for (m of messages(); track m.id) {
+        <!-- Mensaje propio vs ajeno -->
+        @if ((user$ | async)?.uid === m.uid) {
+          <!-- Outgoing -->
+          <div class="flex items-start gap-3 justify-end">
+            <div class="max-w-[75%] text-right">
+              <!-- meta -->
+              <div class="flex items-center justify-end gap-2 mb-1">
+                <span class="text-slate-500 text-[11px]">Tú</span>
+                <span class="text-slate-500/70 text-[11px]">
+              {{ m.createdAt?.toDate?.() | date:'HH:mm' }}
+            </span>
+              </div>
+
+
+              <div class="bg-white text-slate-900 rounded-2xl rounded-tr-md px-4 py-3 shadow-md inline-block">
+                @if (m.imageUrl) {
+                  <img
+                    [src]="m.imageUrl"
+                    alt="Imagen enviada"
+                    class="max-w-65 sm:max-w-85 rounded-xl object-cover"
+                    loading="lazy"
+                    (load)="stickToBottom && scrollToBottom()"
+                  />
+                }
+                @if (m.text) {
+                  <p class="text-sm leading-relaxed">{{ m.text }}</p>
+                }
+
+
+              </div>
+            </div>
+
+            <div class="w-9 h-9 rounded-full overflow-hidden bg-slate-600 shrink-0">
+              <img
+                class="w-full h-full object-cover"
+                [src]="(user$ | async)?.photoURL ?? 'https://ui-avatars.com/api/?name=Me&background=475569&color=fff'"
+                alt="Tu avatar"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+          </div>
+        } @else {
+          <!-- Incoming -->
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-full overflow-hidden bg-slate-700 shrink-0">
+              <img
+                class="w-full h-full object-cover"
+                [src]="m.photoURL || 'https://ui-avatars.com/api/?name=User&background=334155&color=fff'"
+                [alt]="m.email || 'Usuario'"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+
+            <div class="max-w-[75%]">
+              <div class="flex items-center gap-2 mb-1">
+            <span class="text-slate-300 text-[11px] truncate max-w-55">
+              {{ m.email ?? 'Anónimo' }}
+            </span>
+                <span class="text-slate-500/70 text-[11px]">
+              {{ m.createdAt?.toDate?.() | date:'HH:mm' }}
+            </span>
+              </div>
+              <div class="bg-slate-900/60 border border-slate-700 text-slate-100 rounded-2xl rounded-tl-md px-4 py-3">
+                @if (m.imageUrl) {
+                  <img
+                    [src]="m.imageUrl"
+                    alt="Imagen recibida"
+                    class="max-w-65 sm:max-w-85 rounded-xl object-cover"
+                    loading="lazy"
+                    (load)="stickToBottom && scrollToBottom()"
+                  />
+                }
+
+                @if (m.text) {
+                  <p class="text-sm leading-relaxed">{{ m.text }}</p>
+                }
+              </div>
+            </div>
+          </div>
+
+        }
+
+      } @empty {
+
+        <p class="text-slate-400 text-sm">Todavía no hay mensajes… arrancá vos 😄</p>
+      }
+      <div #bottom></div>
+
+    </main>
+
+    <!-- Composer -->
+    <footer class="border-t border-slate-700 px-4 sm:px-6 py-4 bg-slate-900/30">
+      <div class="flex items-end gap-3">
+        <div class="flex-1 flex bg-slate-900/60 border border-slate-700 rounded-2xl px-4 py-3 ">
+  <textarea
+    rows="1"
+    [(ngModel)]="message"
+    placeholder="Envia un mensaje..."
+    (input)="autoGrow($event)"
+    (keydown)="onKeyDown($event)"
+    class="w-full bg-transparent text-slate-100 placeholder:text-slate-500
+         resize-none overflow-y-auto outline-none
+         max-h-40"
+  ></textarea>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            class="hidden"
+            (change)="uploadImage($event)"
+          >
+          <svg
+            (click)="fileInput.click()"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="lucide h-6 w-6 text-slate-500 cursor-pointer hover:text-white transition"
+          >
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <circle cx="9" cy="9" r="2"/>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+          </svg>
+        </div>
+
+        <button
+          (click)="sendMessage()"
+          [disabled]="isSending() || !message.trim()"
+          class="h-10 px-4 rounded-2xl bg-white text-slate-900 font-semibold
+         hover:bg-slate-100 transition active:scale-[0.98]
+         disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Enviar
+        </button>
+      </div>
+    </footer>
+  </div>
+</div>

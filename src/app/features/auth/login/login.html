@@ -1,0 +1,50 @@
+<div class="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
+  <div class="w-full max-w-md bg-slate-800/80 backdrop-blur rounded-2xl shadow-xl p-8 border border-slate-700">
+
+    <!-- Logo / Title -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-white tracking-tight">
+        Chat App
+      </h1>
+      <p class="text-slate-400 mt-2">
+        Iniciá sesión para entrar a la sala
+      </p>
+    </div>
+
+    <!-- Google Login Button -->
+    <button
+      type="button"
+      (click)="LoginGoogle()"
+      [disabled]="isLoading()"
+      class="w-full flex items-center justify-center gap-3 rounded-xl py-3 px-4 font-semibold
+         bg-white text-slate-900 shadow-md transition
+         hover:bg-slate-100 active:scale-[0.98]
+         disabled:opacity-60 disabled:cursor-not-allowed"
+    >
+      @if (!isLoading()) {
+        <!-- Google Icon -->
+        <svg class="w-5 h-5" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335"
+                d="M24 9.5c3.2 0 6.1 1.1 8.4 3.2l6.3-6.3C34.6 2.6 29.6 0 24 0 14.6 0 6.6 5.4 2.7 13.2l7.4 5.7C12 13.2 17.6 9.5 24 9.5z"/>
+          <path fill="#4285F4"
+                d="M46.1 24.6c0-1.6-.1-2.8-.4-4.1H24v7.7h12.6c-.3 2-1.8 5-5 7l7.7 6c4.5-4.2 7.1-10.3 7.1-16.6z"/>
+          <path fill="#FBBC05"
+                d="M10.1 28.9c-.5-1.4-.8-2.9-.8-4.4s.3-3 .8-4.4l-7.4-5.7C1 17.8 0 20.8 0 24s1 6.2 2.7 9.6l7.4-4.7z"/>
+          <path fill="#34A853"
+                d="M24 48c5.6 0 10.3-1.8 13.8-4.9l-7.7-6c-2.1 1.4-4.9 2.4-6.1 2.4-6.4 0-12-3.7-14.5-9l-7.4 4.7C6.6 42.6 14.6 48 24 48z"/>
+        </svg>
+
+        <span>Continuar con Google</span>
+      } @else {
+        <!-- Spinner -->
+        <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
+          <circle class="opacity-25" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 0 1 8-8v2a6 6 0 0 0-6 6H4z"></path>
+        </svg>
+
+        <span>Conectando...</span>
+      }
+    </button>
+  </div>
+</div>

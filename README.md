@@ -1,59 +1,35 @@
 # FirebaseChat
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+Real-time chat built with **Angular** and **Firebase** (Authentication + Cloud Firestore).  
+This repository contains the Angular client and the Firebase-ready configuration needed to run it locally and deploy it.
 
-## Development server
+## Demo
 
-To start a local development server, run:
+Live demo (Firebase Hosting):
 
-```bash
-ng serve
-```
+- https://fir-chat-b890c.web.app/
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Features
 
-## Code scaffolding
+- Real-time messages with **Cloud Firestore**
+- User authentication with **Firebase Auth** (provider(s) configurable in Firebase Console)
+- Production-ready build and deployment to **Firebase Hosting**
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tech Stack
 
-```bash
-ng generate component component-name
-```
+- Angular (Angular CLI)
+- Firebase Web SDK (Auth + Firestore)
+- Firebase Hosting
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Prerequisites
 
-```bash
-ng generate --help
-```
+- Node.js and npm installed (use a Node version compatible with your Angular version)
+- Angular CLI installed globally (optional, but recommended)
+- A Firebase project (Firestore + Auth enabled)
 
-## Building
+## Getting Started
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### 1) Install dependencies
 
 ```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+npm install
